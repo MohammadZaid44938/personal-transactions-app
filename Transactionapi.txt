@@ -1,0 +1,81 @@
+sessionStorage.setItem('nm', nm);
+var value = sessionStorage.getItem('nm');
+
+1]//add user
+https://codingshika.com/APP/EXP/add_user.php
+key: mobile uname  opbal
+
+https://codingshika.com/APP/EXP/opbal_list.php?uid=1
+
+2]//login
+https://codingshika.com/APP/EXP/user_login.php
+key  mobile
+
+3]//credit dd-mm-yyyy
+https://codingshika.com/APP/EXP/insert_credit.php
+uid,date,note,debit,credit
+
+4]//debit
+https://codingshika.com/APP/EXP/insert_debit.php
+uid,date,note,debit,credit
+
+
+5]//transaction
+https://codingshika.com/APP/EXP/transaction_list.php?uid=1
+uid
+
+add api
+
+https://codingshika.com/APP/WS_API/select_test.php
+
+delete api
+
+https://codingshika.com/APP/WS_API/delete_test.php
+
+insert api
+
+https://codingshika.com/APP/WS_API/insert_test.php
+
+
+
+
+
+
+axios
+  .post("https://codingshika.com/APP/EXP/transaction_list.php?uid=" + value)
+  .then((res) => {
+    let ar = res.data.posts.post;
+    let l = ar.length;
+    let totalCredit = 0; // initialize total credit
+
+    for (let i = 0; i < l; i++) {
+      let rowData = "<tr><td>" + formateDate(ar[i].DATE) + "</td>";
+      rowData += "<td>" + ar[i].NOTE + "</td>";
+
+      let credit = Number(ar[i].CREDIT);
+      let debit = Number(ar[i].DEBIT);
+
+      // Add to total credit
+      totalCredit += credit;
+
+      // Credit color logic
+      if (credit != 0) {
+        rowData += "<td style='color: green;'>" + credit + "</td>";
+      } else {
+        rowData += "<td style='color: black;'>" + credit + "</td>";
+      }
+
+      // Debit color logic
+      if (debit != 0) {
+        rowData += "<td style='color: red;'>" + debit + "</td>";
+      } else {
+        rowData += "<td style='color: black;'>" + debit + "</td>";
+      }
+
+      rowData += "<td>" + ar[i].CLBAL + "</td>";
+      $("#dt").append(rowData);
+    }
+
+    // Show total credit in HTML
+    document.getElementById("totalCred").innerHTML = totalCredit.toFixed(2);
+  });
